@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Family Gathering</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
+body{font-family:Poppins,sans-serif;background:linear-gradient(180deg,#fff8ef,#fff,#f8f8f8);color:#333}
+section{padding:80px 20px}
+.hero{min-height:100vh;display:flex;justify-content:center;align-items:center}
+.card{max-width:720px;width:95%;background:rgba(255,255,255,.82);backdrop-filter:blur(14px);padding:45px;border-radius:25px;box-shadow:0 25px 60px rgba(0,0,0,.12);text-align:center}
+h1,h2{font-family:"Playfair Display",serif}
+h1{font-size:3rem;margin-bottom:10px}
+.sub{color:#666;margin-bottom:25px}
+.envelope{width:170px;height:120px;margin:25px auto;position:relative;cursor:pointer}
+.base{position:absolute;inset:0;background:#c79658;border-radius:0 0 10px 10px}
+.flap{position:absolute;inset:0;background:#b07b3f;clip-path:polygon(0 0,50% 55%,100% 0);transform-origin:top;transition:1s}
+.letter{position:absolute;left:8%;bottom:6%;width:84%;height:82%;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:40px;transition:1s}
+.open .flap{transform:rotateX(180deg)}
+.open .letter{transform:translateY(-80px)}
+button,.btn{background:#176d63;color:#fff;border:none;padding:14px 32px;border-radius:30px;cursor:pointer;text-decoration:none;display:inline-block;margin-top:20px}
+#invite{display:none;animation:fade .8s}
+@keyframes fade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+#typing{font-size:18px;line-height:1.9;color:#555;min-height:120px;margin-top:15px}
+.cursor{display:inline-block;width:2px;height:20px;background:#176d63;vertical-align:middle;animation:blink .8s infinite}
+@keyframes blink{50%{opacity:0}}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:900px;margin:35px auto}
+.box{background:#fff;padding:25px;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,.08);opacity:0;transform:translateY(30px);transition:.7s}
+.box.show{opacity:1;transform:translateY(0)}
+.count{font-size:2rem;color:#176d63;font-weight:700}
+.quote{max-width:700px;margin:auto;text-align:center;font-size:1.35rem;font-style:italic;color:#555}
+footer{text-align:center;padding:40px;color:#777}
+</style>
+</head>
+<body>
+
+<section class="hero">
+<div class="card">
+<p>✨ YOU ARE INVITED ✨</p>
+<h1>Family Gathering</h1>
+<p class="sub">Let's create another beautiful memory together.</p>
+
+<div class="envelope" id="env">
+<div class="base"></div>
+<div class="flap"></div>
+<div class="letter">💌</div>
+</div>
+
+<button onclick="openInvite()">Open Invitation</button>
+
+<div id="invite">
+<h2>✨ Welcome ✨</h2>
+<p id="typing"></p>
+<a href="#countdown" id="beginBtn" class="btn" style="display:none">↓ Let's Begin</a>
+</div>
+
+</div>
+</section>
+
+<section id="countdown">
+<h2 style="text-align:center">Countdown</h2>
+<div class="grid">
+<div class="box"><div class="count" id="days">0</div>Days</div>
+<div class="box"><div class="count" id="hours">0</div>Hours</div>
+<div class="box"><div class="count" id="minutes">0</div>Minutes</div>
+<div class="box"><div class="count" id="seconds">0</div>Seconds</div>
+</div>
+</section>
+
+<section>
+<h2 style="text-align:center">Event Details</h2>
+<div class="grid">
+<div class="box">📅<br><b>Sunday, 5th July 2026</b></div>
+<div class="box">🕕<br><b>6:00 PM Onwards</b></div>
+<div class="box">📍<br><b>Paradise Palm<br>IIM Road, Lucknow</b></div>
+</div>
+</section>
+
+<section>
+<div class="quote">
+“The happiest moments in life are those shared with family.<br><br>
+Looking forward to an evening filled with love, laughter and unforgettable memories. ❤️”
+</div>
+</section>
+
+<footer>Made with ❤️ for Our Family Gathering</footer>
+
+<script>
+function openInvite(){
+ document.getElementById("env").classList.add("open");
+ setTimeout(()=>{
+   document.getElementById("invite").style.display="block";
+   typeMessage();
+ },700);
+}
+function typeMessage(){
+ const text="Time may pass, but the warmth of family never fades...\n\nLet's come together once again to share smiles, stories, laughter, and unforgettable moments.";
+ const el=document.getElementById("typing");
+ let i=0;
+ function step(){
+   if(i<text.length){
+     let current=el.innerHTML.replace('<span class=\"cursor\"></span>','');
+     if(text[i]=="\n") current+="<br>";
+     else current+=text[i];
+     el.innerHTML=current+'<span class="cursor"></span>';
+     i++;
+     setTimeout(step,35);
+   }else{
+     el.innerHTML=el.innerHTML.replace('<span class="cursor"></span>','');
+     document.getElementById("beginBtn").style.display="inline-block";
+   }
+ }
+ step();
+}
+const target=new Date("2026-07-05T18:00:00").getTime();
+const dE=document.getElementById("days"),hE=document.getElementById("hours"),mE=document.getElementById("minutes"),sE=document.getElementById("seconds");
+setInterval(()=>{
+ let diff=Math.max(0,target-Date.now());
+ dE.textContent=Math.floor(diff/86400000);
+ hE.textContent=Math.floor(diff%86400000/3600000);
+ mE.textContent=Math.floor(diff%3600000/60000);
+ sE.textContent=Math.floor(diff%60000/1000);
+},1000);
+
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(e=>{
+   if(e.isIntersecting)e.target.classList.add("show");
+ });
+},{threshold:.2});
+document.querySelectorAll(".box").forEach(b=>observer.observe(b));
+</script>
+</body>
+</html>
